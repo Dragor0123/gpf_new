@@ -5,6 +5,8 @@ from torch_geometric.nn import global_add_pool, global_mean_pool, global_max_poo
 import torch.nn.functional as F
 from torch_scatter import scatter_add
 from torch_geometric.nn.inits import glorot, zeros
+import torch_geometric.utils
+
 
 num_atom_type = 120  # including the extra mask tokens
 num_chirality_tag = 3
@@ -36,7 +38,7 @@ class GINConv(MessagePassing):
         torch.nn.init.xavier_uniform_(self.edge_embedding1.weight.data)
         torch.nn.init.xavier_uniform_(self.edge_embedding2.weight.data)
         self.aggr = aggr
-
+        
     def forward(self, x, edge_index, edge_attr):
         # add self loops in the edge space
         edge_index = add_self_loops(edge_index, num_nodes=x.size(0))
@@ -49,8 +51,8 @@ class GINConv(MessagePassing):
 
         edge_embeddings = self.edge_embedding1(edge_attr[:, 0]) + self.edge_embedding2(edge_attr[:, 1])
 
-        # return self.propagate(edge_index=edge_index[0], x=x, edge_attr=edge_embeddings)
-        return self.propagate(self.aggr, edge_index=edge_index, x=x, edge_attr=edge_embeddings)
+        return self.propagate(edge_index=edge_index[0], x=x, edge_attr=edge_embeddings)
+    
 
     def message(self, x_j, edge_attr):
         return x_j + edge_attr
@@ -206,8 +208,6 @@ class GraphSAGEConv(MessagePassing):
 
 class GNN(torch.nn.Module):
     """
-    
-
     Args:
         num_layer (int): the number of GNN layers
         emb_dim (int): dimensionality of embeddings
