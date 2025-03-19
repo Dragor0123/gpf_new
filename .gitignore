@@ -1,0 +1,30 @@
+# 1. dataset/ 디렉토리 내 모든 파일과 하위 디렉토리 무시
+dataset/
+
+# 2. Python의 __pycache__ 및 .pyc 파일 무시
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# 3. Python 실행 시 생성될 수 있는 임시 파일 무시
+*.tmp
+*.swp
+*.swo
+*.bak
+.DS_Store
+*.~*
+*.egg-info/
+*.egg
+*.manifest
+*.spec
+*.ipynb_checkpoints/
+
+# 4. 가상환경 관련 파일 무시
+venv/
+.env
+*.env
+*.venv
+
+# 5. Jupyter Notebook 실행 중 생성될 수 있는 파일 무시
+.ipynb_checkpoints/
